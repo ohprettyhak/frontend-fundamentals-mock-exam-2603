@@ -1,39 +1,17 @@
 import { css } from '@emotion/react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Top, Spacing, Border, Button, Text, Select, ListRow } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
-import { getRooms, getReservations, createReservation } from 'pages/remotes';
+import { EQUIPMENT_LABELS, ALL_EQUIPMENT, START_TIME_SLOTS, END_TIME_SLOTS } from 'pages/constants';
+import { formatDate } from 'pages/utils';
+import { useRooms } from 'pages/hooks/useRooms';
+import { useReservations } from 'pages/hooks/useReservations';
+import { useCreateReservation } from 'pages/hooks/useCreateReservation';
 import axios from 'axios';
-
-const EQUIPMENT_LABELS: Record<string, string> = {
-  tv: 'TV',
-  whiteboard: '화이트보드',
-  video: '화상장비',
-  speaker: '스피커',
-};
-
-const ALL_EQUIPMENT = ['tv', 'whiteboard', 'video', 'speaker'];
-
-const TIME_SLOTS: string[] = [];
-for (let h = 9; h <= 20; h++) {
-  TIME_SLOTS.push(`${String(h).padStart(2, '0')}:00`);
-  if (h < 20) {
-    TIME_SLOTS.push(`${String(h).padStart(2, '0')}:30`);
-  }
-}
-
-function formatDate(date: Date): string {
-  const y = date.getFullYear();
-  const m = String(date.getMonth() + 1).padStart(2, '0');
-  const d = String(date.getDate()).padStart(2, '0');
-  return `${y}-${m}-${d}`;
-}
 
 export function RoomBookingPage() {
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [date, setDate] = useState(searchParams.get('date') || formatDate(new Date()));
@@ -61,19 +39,9 @@ export function RoomBookingPage() {
     setSearchParams(params, { replace: true });
   }, [date, startTime, endTime, attendees, equipment, preferredFloor, setSearchParams]);
 
-  const { data: rooms = [] } = useQuery(['rooms'], getRooms);
-  const { data: reservations = [] } = useQuery(['reservations', date], () => getReservations(date), { enabled: !!date });
-
-  const createMutation = useMutation(
-    (data: { roomId: string; date: string; start: string; end: string; attendees: number; equipment: string[] }) =>
-      createReservation(data),
-    {
-      onSuccess: (_data, variables) => {
-        queryClient.invalidateQueries(['reservations', variables.date]);
-        queryClient.invalidateQueries(['myReservations']);
-      },
-    }
-  );
+  const { rooms, floors } = useRooms();
+  const { reservations } = useReservations(date);
+  const { createReservation, isCreating } = useCreateReservation();
 
   // 필터 변경 시 선택 초기화
   const handleFilterChange = () => {
@@ -94,8 +62,6 @@ export function RoomBookingPage() {
   const isFilterComplete = hasTimeInputs && !validationError;
 
   // 필터링
-  const floors = [...new Set(rooms.map((r: { floor: number }) => r.floor))].sort((a: number, b: number) => a - b);
-
   const availableRooms = isFilterComplete
     ? rooms
         .filter((room: { id: string; capacity: number; equipment: string[]; floor: number }) => {
@@ -126,7 +92,7 @@ export function RoomBookingPage() {
     }
 
     try {
-      const result = await createMutation.mutateAsync({
+      const result = await createReservation({
         roomId: selectedRoomId,
         date,
         start: startTime,
@@ -225,7 +191,7 @@ export function RoomBookingPage() {
               aria-label="시작 시간"
             >
               <option value="">선택</option>
-              {TIME_SLOTS.slice(0, -1).map(t => (
+              {START_TIME_SLOTS.map(t => (
                 <option key={t} value={t}>{t}</option>
               ))}
             </Select>
@@ -238,7 +204,7 @@ export function RoomBookingPage() {
               aria-label="종료 시간"
             >
               <option value="">선택</option>
-              {TIME_SLOTS.slice(1).map(t => (
+              {END_TIME_SLOTS.map(t => (
                 <option key={t} value={t}>{t}</option>
               ))}
             </Select>
@@ -390,8 +356,8 @@ export function RoomBookingPage() {
           )}
 
           <Spacing size={16} />
-          <Button display="full" onClick={handleBook} disabled={createMutation.isLoading}>
-            {createMutation.isLoading ? '예약 중...' : '확정'}
+          <Button display="full" onClick={handleBook} disabled={isCreating}>
+            {isCreating ? '예약 중...' : '확정'}
           </Button>
         </div>
       )}
