@@ -1,12 +1,13 @@
 import { css } from '@emotion/react';
-import { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Top, Spacing, Border, Button, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { formatDate } from 'utils/date';
 import { useRooms } from 'pages/hooks/useRooms';
 import { useReservations } from 'pages/hooks/useReservations';
 import { useMyReservations } from './useMyReservations';
+import { useFlashMessage } from './useFlashMessage';
 import { DateInput } from 'pages/components/DateInput';
 import { MessageBanner } from 'pages/components/MessageBanner';
 import { Timeline } from './Timeline';
@@ -14,19 +15,8 @@ import { MyReservationList } from './MyReservationList';
 
 export function ReservationStatusPage() {
   const navigate = useNavigate();
-  const location = useLocation();
   const [date, setDate] = useState(formatDate(new Date()));
-
-  const messageFromState = (location.state as { message?: string } | null)?.message;
-  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(
-    messageFromState ? { type: 'success', text: messageFromState } : null
-  );
-
-  useEffect(() => {
-    if (messageFromState) {
-      window.history.replaceState({}, '');
-    }
-  }, [messageFromState]);
+  const { message, setMessage } = useFlashMessage();
 
   const { rooms } = useRooms();
   const { reservations } = useReservations(date);
