@@ -5,7 +5,7 @@ import { Top, Spacing, Border } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { useRooms } from 'pages/hooks/useRooms';
 import { useReservations } from 'pages/hooks/useReservations';
-import { useCreateReservation } from './useCreateReservation';
+import { useBooking } from './useBooking';
 import { MessageBanner } from 'pages/components/MessageBanner';
 import { useBookingFilters } from './useBookingFilters';
 import { filterAvailableRooms } from './filterAvailableRooms';
@@ -17,7 +17,7 @@ export function RoomBookingPage() {
   const { filters, updateFilters, validationError, isFilterComplete } = useBookingFilters();
   const { rooms, floors } = useRooms();
   const { reservations } = useReservations(filters.date);
-  const { book, isCreating } = useCreateReservation();
+  const { book, isBooking } = useBooking();
   const { availableRooms } = useMemo(
     () => filterAvailableRooms(rooms, reservations, filters, isFilterComplete),
     [rooms, reservations, filters, isFilterComplete]
@@ -103,7 +103,7 @@ export function RoomBookingPage() {
             selectedRoomId={selectedRoomId}
             onSelect={setSelectedRoomId}
             onBook={handleBook}
-            isBooking={isCreating}
+            isBooking={isBooking}
           />
         </div>
       )}

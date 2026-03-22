@@ -16,7 +16,7 @@ type BookingResult =
   | { success: true }
   | { success: false; message: string };
 
-export function useCreateReservation() {
+export function useBooking() {
   const queryClient = useQueryClient();
 
   const mutation = useMutation(
@@ -51,6 +51,6 @@ export function useCreateReservation() {
 
   return {
     book,
-    isCreating: mutation.isLoading,
+    isBooking: mutation.isLoading,
   };
 }
