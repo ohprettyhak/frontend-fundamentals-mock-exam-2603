@@ -8,9 +8,10 @@ interface MyReservationListProps {
   reservations: Reservation[];
   rooms: Room[];
   onCancel: (id: string) => void;
+  isCancelling: boolean;
 }
 
-export function MyReservationList({ reservations, rooms, onCancel }: MyReservationListProps) {
+export function MyReservationList({ reservations, rooms, onCancel, isCancelling }: MyReservationListProps) {
   const getRoomName = (roomId: string) => rooms.find(r => r.id === roomId)?.name ?? roomId;
 
   return (
@@ -48,6 +49,7 @@ export function MyReservationList({ reservations, rooms, onCancel }: MyReservati
                     type="danger"
                     style="weak"
                     size="small"
+                    disabled={isCancelling}
                     onClick={(e) => {
                       e.stopPropagation();
                       if (window.confirm('정말 취소하시겠습니까?')) {

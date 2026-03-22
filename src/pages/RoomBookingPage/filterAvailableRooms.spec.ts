@@ -1,5 +1,6 @@
 import { describe, test, expect } from 'vitest';
-import type { Room, Reservation } from '_tosslib/server/types';
+import type { Room, Reservation, Equipment } from '_tosslib/server/types';
+import type { BookingFilters } from './useBookingFilters';
 import { filterAvailableRooms } from './filterAvailableRooms';
 
 const rooms: Room[] = [
@@ -9,13 +10,13 @@ const rooms: Room[] = [
   { id: 'r4', name: '회의실 D', floor: 7, capacity: 20, equipment: ['tv', 'whiteboard', 'video', 'speaker'] },
 ];
 
-const baseFilters = {
+const baseFilters: BookingFilters = {
   date: '2026-03-10',
   startTime: '10:00',
   endTime: '11:00',
   attendees: 1,
-  equipment: [] as string[],
-  preferredFloor: null as number | null,
+  equipment: [],
+  preferredFloor: null,
 };
 
 describe('filterAvailableRooms', () => {
@@ -33,7 +34,7 @@ describe('filterAvailableRooms', () => {
   });
 
   test('필요 장비가 없는 회의실을 제외한다', () => {
-    const filters = { ...baseFilters, equipment: ['video', 'speaker'] };
+    const filters = { ...baseFilters, equipment: ['video', 'speaker'] as Equipment[] };
     const { availableRooms } = filterAvailableRooms(rooms, [], filters, true);
 
     expect(availableRooms.every(r =>

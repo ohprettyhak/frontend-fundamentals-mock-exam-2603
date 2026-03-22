@@ -12,6 +12,7 @@ export function MessageBanner({ type, message }: MessageBannerProps) {
 
   return (
     <div
+      role="alert"
       css={css`
         padding: 10px 14px; border-radius: 10px;
         background: ${isSuccess ? colors.blue50 : colors.red50};

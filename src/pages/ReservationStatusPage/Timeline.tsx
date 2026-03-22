@@ -64,8 +64,15 @@ export function Timeline({ rooms, reservations }: TimelineProps) {
                   <div key={res.id} css={css`position: absolute; left: ${left}%; width: ${width}%; height: 100%;`}>
                     <div
                       role="button"
+                      tabIndex={0}
                       aria-label={`${room.name} ${res.start}-${res.end} 예약 상세`}
                       onClick={() => setActiveReservationId(isActive ? null : res.id)}
+                      onKeyDown={e => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          setActiveReservationId(isActive ? null : res.id);
+                        }
+                      }}
                       css={css`
                         width: 100%; height: 100%; background: ${colors.blue400}; border-radius: 4px;
                         opacity: ${isActive ? 1 : 0.75}; cursor: pointer; transition: opacity 0.15s;

@@ -1,4 +1,4 @@
-import type { Room, Reservation, Equipment } from '_tosslib/server/types';
+import type { Room, Reservation } from '_tosslib/server/types';
 import type { BookingFilters } from './useBookingFilters';
 
 export function filterAvailableRooms(
@@ -14,7 +14,7 @@ export function filterAvailableRooms(
   const availableRooms = rooms
     .filter(room => {
       const hasEnoughCapacity = room.capacity >= attendees;
-      const hasRequiredEquipment = equipment.every(eq => room.equipment.includes(eq as Equipment));
+      const hasRequiredEquipment = equipment.every(eq => room.equipment.includes(eq));
       const isOnPreferredFloor = preferredFloor === null || room.floor === preferredFloor;
       const hasNoTimeConflict = !reservations.some(
         r => r.roomId === room.id && r.date === date && r.start < endTime && r.end > startTime

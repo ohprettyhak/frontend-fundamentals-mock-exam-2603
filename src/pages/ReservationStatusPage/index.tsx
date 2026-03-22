@@ -17,20 +17,20 @@ export function ReservationStatusPage() {
   const location = useLocation();
   const [date, setDate] = useState(formatDate(new Date()));
 
-  const locationState = location.state as { message?: string } | null;
+  const messageFromState = (location.state as { message?: string } | null)?.message;
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(
-    locationState?.message ? { type: 'success', text: locationState.message } : null
+    messageFromState ? { type: 'success', text: messageFromState } : null
   );
 
   useEffect(() => {
-    if (locationState?.message) {
+    if (messageFromState) {
       window.history.replaceState({}, '');
     }
-  }, [locationState]);
+  }, [messageFromState]);
 
   const { rooms } = useRooms();
   const { reservations } = useReservations(date);
-  const { myReservations, cancelReservation } = useMyReservations();
+  const { myReservations, cancelReservation, isCancelling } = useMyReservations();
 
   const handleCancel = async (id: string) => {
     try {
@@ -89,6 +89,7 @@ export function ReservationStatusPage() {
           reservations={myReservations}
           rooms={rooms}
           onCancel={handleCancel}
+          isCancelling={isCancelling}
         />
       </div>
 

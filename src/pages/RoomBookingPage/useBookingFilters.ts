@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { formatDate } from 'pages/utils';
+import type { Equipment } from '_tosslib/server/types';
+import { formatDate, timeToMinutes } from 'pages/utils';
 
 export interface BookingFilters {
   date: string;
   startTime: string;
   endTime: string;
   attendees: number;
-  equipment: string[];
+  equipment: Equipment[];
   preferredFloor: number | null;
 }
 
@@ -19,7 +20,7 @@ export function useBookingFilters() {
     startTime: searchParams.get('startTime') || '',
     endTime: searchParams.get('endTime') || '',
     attendees: Number(searchParams.get('attendees')) || 1,
-    equipment: searchParams.get('equipment') ? searchParams.get('equipment')!.split(',').filter(Boolean) : [],
+    equipment: searchParams.get('equipment') ? searchParams.get('equipment')!.split(',').filter(Boolean) as Equipment[] : [],
     preferredFloor: searchParams.get('floor') ? Number(searchParams.get('floor')) : null,
   });
 
@@ -43,7 +44,7 @@ export function useBookingFilters() {
   const hasTimeInputs = filters.startTime !== '' && filters.endTime !== '';
   let validationError: string | null = null;
   if (hasTimeInputs) {
-    if (filters.endTime <= filters.startTime) {
+    if (timeToMinutes(filters.endTime) <= timeToMinutes(filters.startTime)) {
       validationError = '종료 시간은 시작 시간보다 늦어야 합니다.';
     } else if (filters.attendees < 1) {
       validationError = '참석 인원은 1명 이상이어야 합니다.';

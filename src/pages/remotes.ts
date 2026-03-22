@@ -1,4 +1,4 @@
-import type { Room, Reservation } from '_tosslib/server/types';
+import type { Room, Reservation, Equipment } from '_tosslib/server/types';
 import { http } from 'pages/http';
 
 export type CreateReservationResponse =
@@ -19,7 +19,7 @@ export function createReservation(data: {
   start: string;
   end: string;
   attendees: number;
-  equipment: string[];
+  equipment: Equipment[];
 }) {
   return http.post<typeof data, CreateReservationResponse>('/api/reservations', data);
 }

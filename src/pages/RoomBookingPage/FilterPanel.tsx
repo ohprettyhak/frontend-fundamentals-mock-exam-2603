@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { Spacing, Text, Select } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
+import type { Equipment } from '_tosslib/server/types';
 import { EQUIPMENT_LABELS, ALL_EQUIPMENT, START_TIME_SLOTS, END_TIME_SLOTS } from 'pages/constants';
 import { DateInput } from 'pages/components/DateInput';
 import type { BookingFilters } from './useBookingFilters';
@@ -15,7 +16,7 @@ interface FilterPanelProps {
 export function FilterPanel({ filters, onChange, floors, validationError }: FilterPanelProps) {
   const { date, startTime, endTime, attendees, equipment, preferredFloor } = filters;
 
-  const toggleEquipment = (eq: string) => {
+  const toggleEquipment = (eq: Equipment) => {
     const next = equipment.includes(eq)
       ? equipment.filter(e => e !== eq)
       : [...equipment, eq];

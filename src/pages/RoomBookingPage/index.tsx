@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Top, Spacing, Border } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
@@ -19,7 +19,10 @@ export function RoomBookingPage() {
   const { rooms, floors } = useRooms();
   const { reservations } = useReservations(filters.date);
   const { createReservation, isCreating } = useCreateReservation();
-  const { availableRooms } = filterAvailableRooms(rooms, reservations, filters, isFilterComplete);
+  const { availableRooms } = useMemo(
+    () => filterAvailableRooms(rooms, reservations, filters, isFilterComplete),
+    [rooms, reservations, filters, isFilterComplete]
+  );
 
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -33,10 +36,6 @@ export function RoomBookingPage() {
   const handleBook = async () => {
     if (!selectedRoomId) {
       setErrorMessage('회의실을 선택해주세요.');
-      return;
-    }
-    if (!filters.startTime || !filters.endTime) {
-      setErrorMessage('시작 시간과 종료 시간을 선택해주세요.');
       return;
     }
 
