@@ -7,7 +7,7 @@ export const EQUIPMENT_LABELS: Record<Equipment, string> = {
   speaker: '스피커',
 };
 
-export const ALL_EQUIPMENT: Equipment[] = ['tv', 'whiteboard', 'video', 'speaker'];
+export const ALL_EQUIPMENT = Object.keys(EQUIPMENT_LABELS) as Equipment[];
 
 const generateTimeSlots = (): string[] => {
   const slots: string[] = [];
