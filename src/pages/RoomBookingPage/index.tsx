@@ -11,14 +11,13 @@ import { useBookingFilters } from './useBookingFilters';
 import { filterAvailableRooms } from './filterAvailableRooms';
 import { FilterPanel } from './FilterPanel';
 import { AvailableRoomList } from './AvailableRoomList';
-import axios from 'axios';
 
 export function RoomBookingPage() {
   const navigate = useNavigate();
   const { filters, updateFilters, validationError, isFilterComplete } = useBookingFilters();
   const { rooms, floors } = useRooms();
   const { reservations } = useReservations(filters.date);
-  const { createReservation, isCreating } = useCreateReservation();
+  const { book, isCreating } = useCreateReservation();
   const { availableRooms } = useMemo(
     () => filterAvailableRooms(rooms, reservations, filters, isFilterComplete),
     [rooms, reservations, filters, isFilterComplete]
@@ -39,31 +38,19 @@ export function RoomBookingPage() {
       return;
     }
 
-    try {
-      const result = await createReservation({
-        roomId: selectedRoomId,
-        date: filters.date,
-        start: filters.startTime,
-        end: filters.endTime,
-        attendees: filters.attendees,
-        equipment: filters.equipment,
-      });
+    const result = await book({
+      roomId: selectedRoomId,
+      date: filters.date,
+      start: filters.startTime,
+      end: filters.endTime,
+      attendees: filters.attendees,
+      equipment: filters.equipment,
+    });
 
-      if ('ok' in result && result.ok) {
-        navigate('/', { state: { message: '예약이 완료되었습니다!' } });
-        return;
-      }
-
-      const errResult = result as { message?: string };
-      setErrorMessage(errResult.message ?? '예약에 실패했습니다.');
-      setSelectedRoomId(null);
-    } catch (err: unknown) {
-      let serverMessage = '예약에 실패했습니다.';
-      if (axios.isAxiosError(err)) {
-        const data = err.response?.data as { message?: string } | undefined;
-        serverMessage = data?.message ?? serverMessage;
-      }
-      setErrorMessage(serverMessage);
+    if (result.success) {
+      navigate('/', { state: { message: '예약이 완료되었습니다!' } });
+    } else {
+      setErrorMessage(result.message);
       setSelectedRoomId(null);
     }
   };
