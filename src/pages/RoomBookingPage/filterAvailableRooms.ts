@@ -1,7 +1,7 @@
 import type { Room, Reservation, Equipment } from '_tosslib/server/types';
 import type { BookingFilters } from './useBookingFilters';
 
-export function useAvailableRooms(
+export function filterAvailableRooms(
   rooms: Room[],
   reservations: Reservation[],
   filters: BookingFilters,

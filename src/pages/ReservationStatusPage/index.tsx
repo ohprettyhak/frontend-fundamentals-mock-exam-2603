@@ -6,7 +6,7 @@ import { colors } from '_tosslib/constants/colors';
 import { formatDate } from 'pages/utils';
 import { useRooms } from 'pages/hooks/useRooms';
 import { useReservations } from 'pages/hooks/useReservations';
-import { useMyReservations } from 'pages/hooks/useMyReservations';
+import { useMyReservations } from './useMyReservations';
 import { DateInput } from 'pages/components/DateInput';
 import { MessageBanner } from 'pages/components/MessageBanner';
 import { Timeline } from './Timeline';

@@ -3,8 +3,6 @@ import type { Room } from '_tosslib/server/types';
 import { Spacing, Button, Text, ListRow } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { EQUIPMENT_LABELS } from 'pages/constants';
-import { SectionHeader } from 'pages/components/SectionHeader';
-import { EmptyState } from 'pages/components/EmptyState';
 
 interface AvailableRoomListProps {
   rooms: Room[];
@@ -17,11 +15,16 @@ interface AvailableRoomListProps {
 export function AvailableRoomList({ rooms, selectedRoomId, onSelect, onBook, isBooking }: AvailableRoomListProps) {
   return (
     <>
-      <SectionHeader title="예약 가능 회의실" count={rooms.length} countUnit="개" />
+      <div css={css`display: flex; align-items: baseline; gap: 6px;`}>
+        <Text typography="t5" fontWeight="bold" color={colors.grey900}>예약 가능 회의실</Text>
+        <Text typography="t7" fontWeight="medium" color={colors.grey500}>{rooms.length}개</Text>
+      </div>
       <Spacing size={16} />
 
       {rooms.length === 0 ? (
-        <EmptyState message="조건에 맞는 회의실이 없습니다." />
+        <div css={css`padding: 40px 0; text-align: center; background: ${colors.grey50}; border-radius: 14px;`}>
+          <Text typography="t6" color={colors.grey500}>조건에 맞는 회의실이 없습니다.</Text>
+        </div>
       ) : (
         <div css={css`display: flex; flex-direction: column; gap: 10px;`}>
           {rooms.map(room => {

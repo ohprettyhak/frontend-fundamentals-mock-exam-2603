@@ -5,10 +5,10 @@ import { Top, Spacing, Border } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { useRooms } from 'pages/hooks/useRooms';
 import { useReservations } from 'pages/hooks/useReservations';
-import { useCreateReservation } from 'pages/hooks/useCreateReservation';
+import { useCreateReservation } from './useCreateReservation';
 import { MessageBanner } from 'pages/components/MessageBanner';
 import { useBookingFilters } from './useBookingFilters';
-import { useAvailableRooms } from './useAvailableRooms';
+import { filterAvailableRooms } from './filterAvailableRooms';
 import { FilterPanel } from './FilterPanel';
 import { AvailableRoomList } from './AvailableRoomList';
 import axios from 'axios';
@@ -19,7 +19,7 @@ export function RoomBookingPage() {
   const { rooms, floors } = useRooms();
   const { reservations } = useReservations(filters.date);
   const { createReservation, isCreating } = useCreateReservation();
-  const { availableRooms } = useAvailableRooms(rooms, reservations, filters, isFilterComplete);
+  const { availableRooms } = filterAvailableRooms(rooms, reservations, filters, isFilterComplete);
 
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);

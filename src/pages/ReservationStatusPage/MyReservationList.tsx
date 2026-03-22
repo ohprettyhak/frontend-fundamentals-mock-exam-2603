@@ -1,10 +1,8 @@
 import { css } from '@emotion/react';
 import type { Room, Reservation } from '_tosslib/server/types';
-import { Button, ListRow } from '_tosslib/components';
+import { Spacing, Button, Text, ListRow } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { EQUIPMENT_LABELS } from 'pages/constants';
-import { SectionHeader } from 'pages/components/SectionHeader';
-import { EmptyState } from 'pages/components/EmptyState';
 
 interface MyReservationListProps {
   reservations: Reservation[];
@@ -17,10 +15,18 @@ export function MyReservationList({ reservations, rooms, onCancel }: MyReservati
 
   return (
     <>
-      <SectionHeader title="내 예약" count={reservations.length} countUnit="건" />
+      <div css={css`display: flex; align-items: baseline; gap: 6px;`}>
+        <Text typography="t5" fontWeight="bold" color={colors.grey900}>내 예약</Text>
+        {reservations.length > 0 && (
+          <Text typography="t7" fontWeight="medium" color={colors.grey500}>{reservations.length}건</Text>
+        )}
+      </div>
+      <Spacing size={16} />
 
       {reservations.length === 0 ? (
-        <EmptyState message="예약 내역이 없습니다." />
+        <div css={css`padding: 40px 0; text-align: center; background: ${colors.grey50}; border-radius: 14px;`}>
+          <Text typography="t6" color={colors.grey500}>예약 내역이 없습니다.</Text>
+        </div>
       ) : (
         <div css={css`display: flex; flex-direction: column; gap: 10px;`}>
           {reservations.map(res => (
