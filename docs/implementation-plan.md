@@ -228,7 +228,7 @@ function ReservationStatusPage() {
 
 ---
 
-### Step 5. 예약하기 페이지 컴포넌트 분리
+### Step 5. 예약하기 페이지 컴포넌트 분리 ✅
 
 **목표**: `RoomBookingPage`를 선언적 컴포넌트 조합으로 재구성한다.
 
