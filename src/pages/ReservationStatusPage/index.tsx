@@ -8,6 +8,10 @@ import { formatDate, timeToMinutes } from 'pages/utils';
 import { useRooms } from 'pages/hooks/useRooms';
 import { useReservations } from 'pages/hooks/useReservations';
 import { useMyReservations } from 'pages/hooks/useMyReservations';
+import { DateInput } from 'pages/components/DateInput';
+import { MessageBanner } from 'pages/components/MessageBanner';
+import { SectionHeader } from 'pages/components/SectionHeader';
+import { EmptyState } from 'pages/components/EmptyState';
 
 export function ReservationStatusPage() {
   const navigate = useNavigate();
@@ -56,21 +60,7 @@ export function ReservationStatusPage() {
           날짜 선택
         </Text>
         <Spacing size={16} />
-        <div css={css`display: flex; flex-direction: column; gap: 6px;`}>
-          <input
-            type="date"
-            value={date}
-            min={formatDate(new Date())}
-            onChange={e => setDate(e.target.value)}
-            aria-label="날짜"
-            css={css`
-              box-sizing: border-box; font-size: 16px; font-weight: 500; line-height: 1.5; height: 48px;
-              background-color: ${colors.grey50}; border-radius: 12px; color: ${colors.grey800};
-              width: 100%; border: 1px solid ${colors.grey200}; padding: 0 16px; outline: none;
-              transition: border-color 0.15s; &:focus { border-color: ${colors.blue500}; }
-            `}
-          />
-        </div>
+        <DateInput value={date} onChange={setDate} />
       </div>
 
       <Spacing size={24} />
@@ -175,45 +165,18 @@ export function ReservationStatusPage() {
       {/* 메시지 배너 */}
       {message && (
         <div css={css`padding: 0 24px;`}>
-          <div
-            css={css`
-              padding: 10px 14px; border-radius: 10px;
-              background: ${message.type === 'success' ? colors.blue50 : colors.red50};
-              display: flex; align-items: center; gap: 8px;
-            `}
-          >
-            <Text
-              typography="t7"
-              fontWeight="medium"
-              color={message.type === 'success' ? colors.blue600 : colors.red500}
-            >
-              {message.text}
-            </Text>
-          </div>
+          <MessageBanner type={message.type} message={message.text} />
           <Spacing size={12} />
         </div>
       )}
 
       {/* 내 예약 목록 */}
       <div css={css`padding: 0 24px;`}>
-        <div css={css`display: flex; align-items: baseline; gap: 6px;`}>
-          <Text typography="t5" fontWeight="bold" color={colors.grey900}>
-            내 예약
-          </Text>
-          {myReservationList.length > 0 && (
-            <Text typography="t7" fontWeight="medium" color={colors.grey500}>
-              {myReservationList.length}건
-            </Text>
-          )}
-        </div>
+        <SectionHeader title="내 예약" count={myReservationList.length} countUnit="건" />
         <Spacing size={16} />
 
         {myReservationList.length === 0 ? (
-          <div css={css`padding: 40px 0; text-align: center; background: ${colors.grey50}; border-radius: 14px;`}>
-            <Text typography="t6" color={colors.grey500}>
-              예약 내역이 없습니다.
-            </Text>
-          </div>
+          <EmptyState message="예약 내역이 없습니다." />
         ) : (
           <div css={css`display: flex; flex-direction: column; gap: 10px;`}>
             {myReservationList.map((res: { id: string; roomId: string; date: string; start: string; end: string; attendees: number; equipment: string[] }) => (
