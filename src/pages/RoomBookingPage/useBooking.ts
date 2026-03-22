@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { Equipment } from '_tosslib/server/types';
 import { createReservation } from 'api/remotes';
+import { queryKeys } from 'api/queryKeys';
 import axios from 'axios';
 
 interface BookingRequest {
@@ -23,8 +24,8 @@ export function useBooking() {
     (data: BookingRequest) => createReservation(data),
     {
       onSuccess: (_data, variables) => {
-        queryClient.invalidateQueries(['reservations', variables.date]);
-        queryClient.invalidateQueries(['myReservations']);
+        queryClient.invalidateQueries(queryKeys.reservations.byDate(variables.date));
+        queryClient.invalidateQueries(queryKeys.myReservations);
       },
     }
   );
