@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getReservations } from 'pages/remotes';
+import { getReservations } from 'api/remotes';
 
 export function useReservations(date: string) {
   const { data: reservations = [] } = useQuery(

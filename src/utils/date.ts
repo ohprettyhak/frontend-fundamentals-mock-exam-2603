@@ -1,4 +1,4 @@
-import { TIMELINE_START } from 'pages/constants';
+import { TIMELINE_START } from 'constants/reservation';
 
 export function formatDate(date: Date): string {
   const y = date.getFullYear();

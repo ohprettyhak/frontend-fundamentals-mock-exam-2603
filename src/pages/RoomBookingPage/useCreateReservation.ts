@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { Equipment } from '_tosslib/server/types';
-import { createReservation } from 'pages/remotes';
+import { createReservation } from 'api/remotes';
 import axios from 'axios';
 
 interface BookingRequest {

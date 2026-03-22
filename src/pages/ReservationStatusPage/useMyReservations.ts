@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getMyReservations, cancelReservation } from 'pages/remotes';
+import { getMyReservations, cancelReservation } from 'api/remotes';
 
 export function useMyReservations() {
   const queryClient = useQueryClient();

@@ -2,7 +2,11 @@ import { css } from '@emotion/react';
 import { Spacing, Text, Select } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import type { Equipment } from '_tosslib/server/types';
-import { EQUIPMENT_LABELS, ALL_EQUIPMENT, START_TIME_SLOTS, END_TIME_SLOTS } from 'pages/constants';
+import { EQUIPMENT_LABELS, TIME_SLOTS } from 'constants/reservation';
+
+const ALL_EQUIPMENT = Object.keys(EQUIPMENT_LABELS) as Equipment[];
+const START_TIME_SLOTS = TIME_SLOTS.slice(0, -1);
+const END_TIME_SLOTS = TIME_SLOTS.slice(1);
 import { DateInput } from 'pages/components/DateInput';
 import type { BookingFilters } from './useBookingFilters';
 

@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { formatDate, timeToMinutes, getTodayString } from 'pages/utils';
+import { formatDate, timeToMinutes, getTodayString } from 'utils/date';
 
 describe('formatDate', () => {
   test('Date 객체를 YYYY-MM-DD 형식으로 변환한다', () => {

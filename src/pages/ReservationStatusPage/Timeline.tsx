@@ -3,8 +3,11 @@ import { useState } from 'react';
 import type { Room, Reservation } from '_tosslib/server/types';
 import { Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
-import { EQUIPMENT_LABELS, HOUR_LABELS, TOTAL_MINUTES } from 'pages/constants';
-import { timeToMinutes } from 'pages/utils';
+import { EQUIPMENT_LABELS, TIME_SLOTS, TIMELINE_START, TIMELINE_END } from 'constants/reservation';
+import { timeToMinutes } from 'utils/date';
+
+const HOUR_LABELS = TIME_SLOTS.filter(t => t.endsWith(':00'));
+const TOTAL_MINUTES = (TIMELINE_END - TIMELINE_START) * 60;
 
 interface TimelineProps {
   rooms: Room[];

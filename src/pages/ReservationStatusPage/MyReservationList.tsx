@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import type { Room, Reservation } from '_tosslib/server/types';
 import { Spacing, Button, Text, ListRow } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
-import { EQUIPMENT_LABELS } from 'pages/constants';
+import { EQUIPMENT_LABELS } from 'constants/reservation';
 
 interface MyReservationListProps {
   reservations: Reservation[];

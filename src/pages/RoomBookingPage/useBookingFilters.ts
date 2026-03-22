@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import type { Equipment } from '_tosslib/server/types';
-import { formatDate, timeToMinutes } from 'pages/utils';
+import { formatDate, timeToMinutes } from 'utils/date';
 
 export interface BookingFilters {
   date: string;

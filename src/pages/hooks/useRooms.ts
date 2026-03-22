@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { getRooms } from 'pages/remotes';
+import { getRooms } from 'api/remotes';
 
 export function useRooms() {
   const { data: rooms = [] } = useQuery(['rooms'], getRooms);

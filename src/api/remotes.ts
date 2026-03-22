@@ -1,5 +1,5 @@
 import type { Room, Reservation, Equipment } from '_tosslib/server/types';
-import { http } from 'pages/http';
+import { http } from 'api/http';
 
 export type CreateReservationResponse =
   | { ok: true; reservation: Reservation }

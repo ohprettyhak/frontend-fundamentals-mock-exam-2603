@@ -26,6 +26,7 @@
     "baseUrl": "src",
     "paths": {
       "_tosslib/*": ["_tosslib/*"],
+      "api/*": ["api/*"],
       "pages/*": ["pages/*"],
       "containers/*": ["containers/*"],
       "components/*": ["components/*"],
